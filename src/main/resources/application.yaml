@@ -1,0 +1,9 @@
+# Spring Datasource settings for embedded H2 database
+spring:
+  application:
+    name: payment-orchestration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/payment_orchestration
+    username: postgres
+    password: root9999
+    driver-class-name: org.postgresql.Driver
