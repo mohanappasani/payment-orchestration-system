@@ -1,4 +1,4 @@
-package paymentOrchestration.dto;
+package com.paymentOrchestration.dto;
 
 public class SampleDto {
     // Sample DTO class

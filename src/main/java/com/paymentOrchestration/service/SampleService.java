@@ -1,4 +1,4 @@
-package paymentOrchestration.service;
+package com.paymentOrchestration.service;
 
 public class SampleService {
     // Sample service class
