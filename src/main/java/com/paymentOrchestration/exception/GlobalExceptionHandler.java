@@ -79,4 +79,19 @@ public class GlobalExceptionHandler {
 		return ApiResponse.builder().success(false).timestamp(LocalDateTime.now()).status(HttpStatus.NOT_FOUND.value())
 				.message("Payment not found").path(request.getRequestURI()).errors(errors).build();
 	}
+
+	/**
+	 * Handles provider routing failures.
+	 */
+	@ExceptionHandler(ProviderRoutingException.class)
+	public ApiResponse<Object> handleProviderRoutingException(ProviderRoutingException ex, HttpServletRequest request) {
+
+		Map<String, String> errors = new HashMap<>();
+
+		errors.put("routing", ex.getMessage());
+
+		return ApiResponse.builder().success(false).timestamp(LocalDateTime.now())
+				.status(HttpStatus.BAD_REQUEST.value()).message("Provider routing failed").path(request.getRequestURI())
+				.errors(errors).build();
+	}
 }

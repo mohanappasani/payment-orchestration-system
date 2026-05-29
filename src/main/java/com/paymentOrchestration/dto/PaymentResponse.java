@@ -15,11 +15,11 @@ import java.util.UUID;
 @Builder
 public class PaymentResponse {
 
-    private UUID paymentId;
+	private UUID paymentId;
 
-    private String status;
+	private String status;
 
-    private String provider;
+	private String provider;
 
-    private String message;
+	private String message;
 }
