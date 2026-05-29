@@ -65,4 +65,18 @@ public class GlobalExceptionHandler {
 				.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).message("Internal server error")
 				.path(request.getRequestURI()).errors(errors).build();
 	}
+
+	/**
+	 * Handles payment not found scenarios.
+	 */
+	@ExceptionHandler(PaymentNotFoundException.class)
+	public ApiResponse<Object> handlePaymentNotFoundException(PaymentNotFoundException ex, HttpServletRequest request) {
+
+		Map<String, String> errors = new HashMap<>();
+
+		errors.put("payment", ex.getMessage());
+
+		return ApiResponse.builder().success(false).timestamp(LocalDateTime.now()).status(HttpStatus.NOT_FOUND.value())
+				.message("Payment not found").path(request.getRequestURI()).errors(errors).build();
+	}
 }

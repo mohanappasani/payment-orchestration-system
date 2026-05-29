@@ -2,6 +2,7 @@ package com.paymentOrchestration.controller;
 
 import com.paymentOrchestration.dto.ApiResponse;
 import com.paymentOrchestration.dto.CreatePaymentRequest;
+import com.paymentOrchestration.dto.FetchPaymentResponse;
 import com.paymentOrchestration.dto.PaymentResponse;
 import com.paymentOrchestration.service.PaymentService;
 
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -23,15 +25,14 @@ public class PaymentController {
 
 	/**
 	 * Creates a new payment request.
-	 *
-	 * @param idempotencyKey unique request identifier
-	 * @param request        payment payload
-	 * @param httpRequest    servlet request
-	 * @return standardized API response
 	 */
 	@PostMapping
 	public ResponseEntity<ApiResponse<PaymentResponse>> createPayment(
-			@RequestHeader("Idempotency-Key") String idempotencyKey, @Valid @RequestBody CreatePaymentRequest request,
+
+			@RequestHeader("Idempotency-Key") String idempotencyKey,
+
+			@Valid @RequestBody CreatePaymentRequest request,
+
 			HttpServletRequest httpRequest) {
 
 		PaymentResponse paymentResponse = paymentService.createPayment(request, idempotencyKey);
@@ -42,5 +43,24 @@ public class PaymentController {
 				.build();
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(response);
+	}
+
+	/**
+	 * Fetches payment details using payment ID.
+	 */
+	@GetMapping("/{paymentId}")
+	public ResponseEntity<ApiResponse<FetchPaymentResponse>> getPayment(
+
+			@PathVariable UUID paymentId,
+
+			HttpServletRequest httpRequest) {
+
+		FetchPaymentResponse paymentResponse = paymentService.getPaymentById(paymentId);
+
+		ApiResponse<FetchPaymentResponse> response = ApiResponse.<FetchPaymentResponse>builder().success(true)
+				.timestamp(LocalDateTime.now()).status(HttpStatus.OK.value()).message("Payment fetched successfully")
+				.path(httpRequest.getRequestURI()).data(paymentResponse).build();
+
+		return ResponseEntity.ok(response);
 	}
 }
