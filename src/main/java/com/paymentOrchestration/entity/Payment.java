@@ -1,5 +1,12 @@
 package com.paymentOrchestration.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -8,20 +15,9 @@ import com.paymentOrchestration.enums.PaymentStatus;
 import com.paymentOrchestration.enums.PaymentType;
 import com.paymentOrchestration.enums.ProviderType;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+/**
+ * Represents a payment transaction in the orchestration system.
+ */
 @Entity
 @Table(name = "payments")
 @Getter
@@ -31,29 +27,53 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Payment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+	/**
+	 * Unique payment identifier.
+	 */
+	@Id
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
-    private String merchantId;
+	/**
+	 * Merchant initiating the payment.
+	 */
+	private String merchantId;
 
-    private BigDecimal amount;
+	/**
+	 * Payment amount.
+	 */
+	private BigDecimal amount;
 
-    private String currency;
+	/**
+	 * Transaction currency.
+	 */
+	private String currency;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentType paymentType;
+	/**
+	 * Type of payment method.
+	 */
+	@Enumerated(EnumType.STRING)
+	private PaymentType paymentType;
 
-    @Enumerated(EnumType.STRING)
-    private ProviderType provider;
+	/**
+	 * Provider used for processing.
+	 */
+	@Enumerated(EnumType.STRING)
+	private ProviderType provider;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentStatus status;
+	/**
+	 * Current payment status.
+	 */
+	@Enumerated(EnumType.STRING)
+	private PaymentStatus status;
 
-    @Column(unique = true)
-    private String idempotencyKey;
+	/**
+	 * Unique key for idempotent requests.
+	 */
+	@Column(unique = true)
+	private String idempotencyKey;
 
-    private LocalDateTime createdAt;
+	private LocalDateTime createdAt;
 
-    private LocalDateTime updatedAt;
+	private LocalDateTime updatedAt;
 }

@@ -8,8 +8,17 @@ import org.springframework.stereotype.Repository;
 
 import com.paymentOrchestration.entity.Payment;
 
+/**
+ * Repository for managing payment persistence operations.
+ */
 @Repository
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
-    Optional<Payment> findByIdempotencyKey(String idempotencyKey);
+	/**
+	 * Finds a payment using idempotency key.
+	 *
+	 * @param idempotencyKey unique idempotency key
+	 * @return matching payment if exists
+	 */
+	Optional<Payment> findByIdempotencyKey(String idempotencyKey);
 }
