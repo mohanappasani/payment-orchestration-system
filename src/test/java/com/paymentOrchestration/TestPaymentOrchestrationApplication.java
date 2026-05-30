@@ -1,4 +1,4 @@
-package paymentOrchestration;
+package com.paymentOrchestration;
 
 import org.springframework.boot.SpringApplication;
 

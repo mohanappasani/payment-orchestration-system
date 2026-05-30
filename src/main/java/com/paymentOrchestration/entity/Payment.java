@@ -66,6 +66,9 @@ public class Payment {
 	 */
 	@Enumerated(EnumType.STRING)
 	private PaymentStatus status;
+	
+	@Column(name = "retry_count")
+	private Integer retryCount;
 
 	/**
 	 * Unique key for idempotent requests.

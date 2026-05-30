@@ -31,7 +31,8 @@ public class RoutingEngine {
 		}
 
 		if (!routingProperties.getPaymentTypes().contains(paymentType.name())) {
-			throw new ProviderRoutingException("Payment type not supported: " + paymentType + ". Supported types: " + routingProperties.getPaymentTypes());
+			throw new ProviderRoutingException("Payment type not supported: " + paymentType + ". Supported types: "
+					+ routingProperties.getPaymentTypes());
 		}
 
 		ProviderType provider = routingProperties.getRouting().get(paymentType);
@@ -41,5 +42,20 @@ public class RoutingEngine {
 		}
 
 		return provider;
+	}
+
+	/**
+	 * Returns fallback provider for a failed provider.
+	 *
+	 * @param providerType failed provider
+	 * @return fallback provider
+	 */
+	public ProviderType getFallbackProvider(ProviderType providerType) {
+
+		if (routingProperties.getFailover() == null) {
+			return null;
+		}
+
+		return routingProperties.getFailover().get(providerType);
 	}
 }

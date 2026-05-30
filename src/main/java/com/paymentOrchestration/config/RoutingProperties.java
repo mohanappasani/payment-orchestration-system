@@ -34,4 +34,7 @@ public class RoutingProperties {
      * List of supported provider types as strings.
      */
     private List<String> providerTypes;
+
+    
+    private Map<ProviderType, ProviderType> failover;
 }

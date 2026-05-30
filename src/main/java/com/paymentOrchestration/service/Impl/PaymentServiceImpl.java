@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.paymentOrchestration.config.RetryProperties;
 import com.paymentOrchestration.dto.CreatePaymentRequest;
 import com.paymentOrchestration.dto.FetchPaymentResponse;
 import com.paymentOrchestration.dto.PaymentResponse;
@@ -33,6 +34,8 @@ public class PaymentServiceImpl implements PaymentService {
 	private final ProviderFactory providerFactory;
 
 	private final IdempotencyService idempotencyService;
+
+	private final RetryProperties retryProperties;
 
 	/**
 	 * Creates and processes a payment request.
@@ -67,12 +70,38 @@ public class PaymentServiceImpl implements PaymentService {
 		PaymentProvider provider = providerFactory.getProvider(providerType);
 
 		// Process payment
-		ProviderResponse providerResponse = provider.processPayment(request);
+		ProviderResponse providerResponse = null;
 
-		// Update payment
+		int attempt = 0;
+
+		while (attempt < retryProperties.getMaxAttempts()) {
+
+			attempt++;
+
+			payment.setRetryCount(attempt);
+
+			providerResponse = provider.processPayment(request);
+
+			if (providerResponse.isSuccess()) {
+				break;
+			}
+
+			payment.setStatus(PaymentStatus.RETRYING);
+
+			ProviderType fallbackProvider = routingEngine.getFallbackProvider(providerType);
+
+			if (fallbackProvider == null) {
+				break;
+			}
+
+			providerType = fallbackProvider;
+
+			provider = providerFactory.getProvider(providerType);
+		}
+
 		payment.setProvider(providerType);
 
-		if (providerResponse.isSuccess()) {
+		if (providerResponse != null && providerResponse.isSuccess()) {
 
 			payment.setStatus(PaymentStatus.SUCCESS);
 

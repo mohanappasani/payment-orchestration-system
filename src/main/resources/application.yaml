@@ -37,5 +37,12 @@ payment:
   routing:
     CARD: PROVIDER_A
     UPI: PROVIDER_B
+  failover:
+    PROVIDER_A: PROVIDER_B
+    PROVIDER_B: PROVIDER_A
   paymentTypes: [CARD, UPI]
   providerTypes: [PROVIDER_A, PROVIDER_B, PROVIDER_C]
+  simulation:
+    provider-a-failure-enabled: true
+  retry:
+    max-attempts: 2
