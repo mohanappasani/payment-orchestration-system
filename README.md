@@ -9,6 +9,8 @@ For detailed documentation, please refer to:
 - [Architecture](ARCHITECTURE.md)
 - [Testing Strategy](TESTING.md)
 
+> Note: The linked docs are provided so readers can easily review the architecture and testing strategy in `ARCHITECTURE.md` and `TESTING.md`.
+
 ---
 
 ## Features
